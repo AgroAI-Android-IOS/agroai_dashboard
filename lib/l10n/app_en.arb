@@ -91,6 +91,7 @@
   "userName": "Username",
   "userNameHint": "Enter your username",
   "save": "Save",
+  "saveChanges": "Save Changes",
   "yourPhoto": "Your Photo",
   "editYourPhoto": "Edit your photo",
   "bio": "BIO",

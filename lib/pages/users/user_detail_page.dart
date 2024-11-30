@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flareline/flutter_gen/app_localizations.dart';
 import 'package:flareline/pages/layout.dart';
 import 'package:flareline_uikit/components/card/common_card.dart';
 import 'package:flareline_uikit/components/forms/outborder_text_form_field.dart';
-import 'package:flareline/flutter_gen/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 class UserDetailPage extends LayoutWidget {
   final int userId;

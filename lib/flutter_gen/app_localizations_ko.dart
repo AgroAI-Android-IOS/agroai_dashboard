@@ -280,6 +280,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get save => '저장';
 
   @override
+  String get saveChanges => 'Save Changes';
+
+  @override
   String get yourPhoto => '당신의 사진';
 
   @override

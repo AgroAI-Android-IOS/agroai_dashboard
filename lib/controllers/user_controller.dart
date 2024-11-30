@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flareline/services/user_service.dart';
 import 'package:get/get.dart';
-import 'package:agroai_dashboard/services/user_service.dart';
 
 class UserController extends GetxController {
   final UserService userService;

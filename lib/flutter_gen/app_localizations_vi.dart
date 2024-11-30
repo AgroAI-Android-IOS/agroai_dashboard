@@ -280,6 +280,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get save => 'Lưu';
 
   @override
+  String get saveChanges => 'Save Changes';
+
+  @override
   String get yourPhoto => 'Ảnh của bạn';
 
   @override

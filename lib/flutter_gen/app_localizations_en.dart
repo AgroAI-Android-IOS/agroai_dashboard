@@ -280,6 +280,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get save => 'Save';
 
   @override
+  String get saveChanges => 'Save Changes';
+
+  @override
   String get yourPhoto => 'Your Photo';
 
   @override

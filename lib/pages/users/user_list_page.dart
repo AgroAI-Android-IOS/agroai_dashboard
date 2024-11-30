@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flareline/flutter_gen/app_localizations.dart';
 import 'package:flareline/pages/layout.dart';
 import 'package:flareline_uikit/components/card/common_card.dart';
 import 'package:flareline_uikit/components/tables/table_widget.dart';
 import 'package:flareline_uikit/entity/table_data_entity.dart';
-import 'package:flareline/flutter_gen/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 class UserListPage extends LayoutWidget {
   const UserListPage({super.key});
@@ -48,13 +48,7 @@ class UserTableViewModel extends BaseTableProvider {
 
   @override
   loadData(BuildContext context) async {
-    const headers = [
-      "User ID",
-      "Name",
-      "Email",
-      "Role",
-      "Actions"
-    ];
+    const headers = ["User ID", "Name", "Email", "Role", "Actions"];
 
     List rows = [];
 
@@ -73,7 +67,8 @@ class UserTableViewModel extends BaseTableProvider {
       row.add(getItemValue('name', item));
       row.add(getItemValue('email', item));
       row.add(getItemValue('role', item));
-      row.add(getItemValue('actions', item, dataType: CellDataType.ACTION.type));
+      row.add(
+          getItemValue('actions', item, dataType: CellDataType.ACTION.type));
       list.add(row);
 
       rows.addAll(list);

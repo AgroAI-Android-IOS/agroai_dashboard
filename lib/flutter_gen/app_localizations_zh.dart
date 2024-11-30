@@ -280,6 +280,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get save => '保存';
 
   @override
+  String get saveChanges => 'Save Changes';
+
+  @override
   String get yourPhoto => '您的照片';
 
   @override

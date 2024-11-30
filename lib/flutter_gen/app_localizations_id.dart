@@ -280,6 +280,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get save => 'Simpan';
 
   @override
+  String get saveChanges => 'Save Changes';
+
+  @override
   String get yourPhoto => 'Foto Anda';
 
   @override
