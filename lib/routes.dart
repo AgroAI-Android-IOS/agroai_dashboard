@@ -19,6 +19,9 @@ import 'package:flareline/pages/profile/profile_page.dart' deferred as profile;
 import 'package:flareline/pages/resetpwd/reset_pwd_page.dart' deferred as resetPwd;
 import 'package:flareline/pages/setting/settings_page.dart' deferred as settings;
 import 'package:flareline/pages/table/tables_page.dart' deferred as tables;
+import 'package:flareline/pages/users/user_list_page.dart' deferred as userList;
+import 'package:flareline/pages/users/user_detail_page.dart' deferred as userDetail;
+import 'package:flareline/pages/users/user_create_page.dart' deferred as userCreate;
 
 typedef PathWidgetBuilder = Widget Function(BuildContext, String?);
 
@@ -51,6 +54,9 @@ final List<Map<String, Object>> MAIN_PAGES = [
     'routerPath': '/modal',
     'widget': DeferredWidget(modal.loadLibrary, () => modal.ModalPage())
   },
+  {'routerPath': '/userList', 'widget': DeferredWidget(userList.loadLibrary, () => userList.UserListPage())},
+  {'routerPath': '/userDetail', 'widget': DeferredWidget(userDetail.loadLibrary, () => userDetail.UserDetailPage(userId: 0))},
+  {'routerPath': '/userCreate', 'widget': DeferredWidget(userCreate.loadLibrary, () => userCreate.UserCreatePage())},
 ];
 
 class RouteConfiguration {
