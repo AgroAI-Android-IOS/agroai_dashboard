@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 class UserService {
@@ -7,15 +8,19 @@ class UserService {
   UserService(this.baseUrl);
 
   Future<List<User>> getUsers() async {
-    final response = await http.get(Uri.parse('$baseUrl/users'));
+    // final response = await http.get(Uri.parse('$baseUrl/users'));
 
-    if (response.statusCode == 200) {
-      List<dynamic> body = jsonDecode(response.body);
-      List<User> users = body.map((dynamic item) => User.fromJson(item)).toList();
-      return users;
-    } else {
-      throw Exception('Failed to load users');
-    }
+    // if (response.statusCode == 200) {
+    //   List<dynamic> body = jsonDecode(response.body);
+    //   List<User> users = body.map((dynamic item) => User.fromJson(item)).toList();
+    //   return users;
+    // } else {
+    //   throw Exception('Failed to load users');
+    // }
+
+    return [
+      User(id: 1, name: 'User 1', email: 'habib@gmail.com', role: 'User'),
+    ];
   }
 
   Future<User> getUser(int id) async {
@@ -80,7 +85,11 @@ class User {
   final String email;
   final String role;
 
-  User({required this.id, required this.name, required this.email, required this.role});
+  User(
+      {required this.id,
+      required this.name,
+      required this.email,
+      required this.role});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(

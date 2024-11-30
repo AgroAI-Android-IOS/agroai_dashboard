@@ -7,14 +7,7 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_ar.dart';
 import 'app_localizations_en.dart';
-import 'app_localizations_es.dart';
 import 'app_localizations_fr.dart';
-import 'app_localizations_id.dart';
-import 'app_localizations_ja.dart';
-import 'app_localizations_ko.dart';
-import 'app_localizations_th.dart';
-import 'app_localizations_vi.dart';
-import 'app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
 
@@ -101,14 +94,7 @@ abstract class AppLocalizations {
   static const List<Locale> supportedLocales = <Locale>[
     Locale('ar'),
     Locale('en'),
-    Locale('es'),
-    Locale('fr'),
-    Locale('id'),
-    Locale('ja'),
-    Locale('ko'),
-    Locale('th'),
-    Locale('vi'),
-    Locale('zh')
+    Locale('fr')
   ];
 
   /// No description provided for @alertsPageTitle.
@@ -992,6 +978,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'OR'**
   String get or;
+
+  /// No description provided for @userDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'User Detail'**
+  String get userDetail;
+
+  /// No description provided for @nameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter name'**
+  String get nameHint;
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get name;
+
+  /// No description provided for @role.
+  ///
+  /// In en, this message translates to:
+  /// **'Role'**
+  String get role;
+
+  /// No description provided for @roleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter role'**
+  String get roleHint;
+
+  /// No description provided for @userList.
+  ///
+  /// In en, this message translates to:
+  /// **'User List'**
+  String get userList;
+
+  /// No description provided for @createUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Create User'**
+  String get createUser;
+
+  /// No description provided for @saveUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Save User'**
+  String get saveUser;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
@@ -1003,7 +1037,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['ar', 'en', 'es', 'fr', 'id', 'ja', 'ko', 'th', 'vi', 'zh'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['ar', 'en', 'fr'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -1016,14 +1050,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'ar': return AppLocalizationsAr();
     case 'en': return AppLocalizationsEn();
-    case 'es': return AppLocalizationsEs();
     case 'fr': return AppLocalizationsFr();
-    case 'id': return AppLocalizationsId();
-    case 'ja': return AppLocalizationsJa();
-    case 'ko': return AppLocalizationsKo();
-    case 'th': return AppLocalizationsTh();
-    case 'vi': return AppLocalizationsVi();
-    case 'zh': return AppLocalizationsZh();
   }
 
   throw FlutterError(

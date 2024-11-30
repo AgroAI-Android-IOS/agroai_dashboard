@@ -148,6 +148,13 @@
   "seeDetail":"See Detail...",
   "tryMore":"Try More...",
   "colorPicker":"Color Picker",
-  "or":"OR"
-
+  "or":"OR",
+  "userDetail": "User Detail",
+  "nameHint": "Enter name",
+  "name": "Name",
+  "role": "Role",
+  "roleHint": "Enter role",
+  "userList": "User List",
+  "createUser": "Create User",
+  "saveUser": "Save User"
 }

@@ -446,4 +446,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get or => 'OR';
+
+  @override
+  String get userDetail => 'User Detail';
+
+  @override
+  String get nameHint => 'Enter name';
+
+  @override
+  String get name => 'Name';
+
+  @override
+  String get role => 'Role';
+
+  @override
+  String get roleHint => 'Enter role';
+
+  @override
+  String get userList => 'User List';
+
+  @override
+  String get createUser => 'Create User';
+
+  @override
+  String get saveUser => 'Save User';
 }

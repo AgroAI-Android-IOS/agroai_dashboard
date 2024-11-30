@@ -28,6 +28,11 @@
         "path": "/invoice"
       },
       {
+        "icon": "assets/sidebar/invoice.svg",
+        "menuName": "Users",
+        "path": "/userList"
+      },
+      {
         "icon": "assets/sidebar/profile.svg",
         "menuName": "Profile",
         "path": "/profile"

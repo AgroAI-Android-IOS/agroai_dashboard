@@ -147,5 +147,13 @@
   "seeDetail": "Voir les détails...",
   "tryMore": "Essayez plus...",
   "colorPicker": "Sélecteur de couleur",
-  "or": "OU"
+  "or": "OU",
+  "userDetail": "Détail de l'utilisateur",
+  "nameHint": "Entrez le nom",
+  "name": "Nom",
+  "role": "Rôle",
+  "roleHint": "Entrez le rôle",
+  "userList": "Liste des utilisateurs",
+  "createUser": "Créer un utilisateur",
+  "saveUser": "Enregistrer l'utilisateur"
 }

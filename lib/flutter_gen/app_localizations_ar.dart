@@ -446,4 +446,28 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get or => 'أو';
+
+  @override
+  String get userDetail => 'تفاصيل المستخدم';
+
+  @override
+  String get nameHint => 'أدخل الاسم';
+
+  @override
+  String get name => 'الاسم';
+
+  @override
+  String get role => 'الدور';
+
+  @override
+  String get roleHint => 'أدخل الدور';
+
+  @override
+  String get userList => 'قائمة المستخدمين';
+
+  @override
+  String get createUser => 'إنشاء مستخدم';
+
+  @override
+  String get saveUser => 'حفظ المستخدم';
 }
