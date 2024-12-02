@@ -155,5 +155,7 @@
   "roleHint": "Entrez le rôle",
   "userList": "Liste des utilisateurs",
   "createUser": "Créer un utilisateur",
-  "saveUser": "Enregistrer l'utilisateur"
+  "saveUser": "Enregistrer l'utilisateur",
+  "title": "Titre",
+  "content": "Contenu"
 }

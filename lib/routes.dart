@@ -2,6 +2,12 @@ import 'package:flareline/deferred_widget.dart';
 import 'package:flareline/pages/alerts/alert_page.dart' deferred as alert;
 import 'package:flareline/pages/auth/sign_in/sign_in_page.dart'
     deferred as signIn;
+
+// ignore: unused_import
+import 'package:flareline/pages/form/Add_post.dart' deferred as AddPost;
+// ignore: unused_import
+import 'package:flareline/pages/form/PostTablePage.dart' deferred as ViewPost;
+
 import 'package:flareline/pages/auth/sign_up/sign_up_page.dart'
     deferred as signUp;
 import 'package:flareline/pages/button/button_page.dart' deferred as button;
@@ -27,7 +33,6 @@ import 'package:flareline/pages/toast/toast_page.dart' deferred as toast;
 import 'package:flareline/pages/tools/tools_page.dart' deferred as tools;
 import 'package:flutter/material.dart';
 import 'package:flareline/pages/Plants/View/PlantList.dart' deferred as plants;
-
 
 typedef PathWidgetBuilder = Widget Function(BuildContext, String?);
 
@@ -115,6 +120,15 @@ final List<Map<String, Object>> MAIN_PAGES = [
     'routerPath': '/modal',
     'widget': DeferredWidget(modal.loadLibrary, () => modal.ModalPage())
   },
+  {
+    'routerPath': '/post',
+    'widget': DeferredWidget(AddPost.loadLibrary, () => AddPost.AddPost()),
+  },
+  {
+    'routerPath': '/viewpost',
+    'widget':
+        DeferredWidget(ViewPost.loadLibrary, () => ViewPost.PostTablePage()),
+  }
 ];
 
 class RouteConfiguration {

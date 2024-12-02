@@ -13,7 +13,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get alertsTitle => 'هناك حاجة للاهتمام';
 
   @override
-  String get alertsMessage => 'ليس لورم إيبسوم مجرد نص وهمية لصناعة الطباعة والطباعة';
+  String get alertsMessage =>
+      'ليس لورم إيبسوم مجرد نص وهمية لصناعة الطباعة والطباعة';
 
   @override
   String get appName => 'فلارلاين';
@@ -253,7 +254,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get resetPwd => 'إعادة تعيين كلمة المرور';
 
   @override
-  String get emailReceiveResetLink => 'أدخل عنوان بريدك الإلكتروني لتلقي وصلة إعادة تعيين كلمة المرور.';
+  String get emailReceiveResetLink =>
+      'أدخل عنوان بريدك الإلكتروني لتلقي وصلة إعادة تعيين كلمة المرور.';
 
   @override
   String get sendPwdResetLink => 'إرسال وصلة إعادة تعيين';
@@ -470,4 +472,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get saveUser => 'حفظ المستخدم';
+
+  @override
+  String get title => 'حفظ';
+  @override
+  String get content => ' دم حفظ';
 }

@@ -1024,6 +1024,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save User'**
   String get saveUser;
+
+  /// No description provided for @title.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get title;
+
+  /// No description provided for @content.
+  ///
+  /// In en, this message translates to:
+  /// **'content'**
+  String get content;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
