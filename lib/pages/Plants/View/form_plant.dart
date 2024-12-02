@@ -1,0 +1,1 @@
+// Create a form to add a new plant with name, category, and picture flutter form you can use the folder form

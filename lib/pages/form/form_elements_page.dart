@@ -83,6 +83,7 @@ class FormElementsPage extends LayoutWidget {
               AppLocalizations.of(context)!.inputFields,
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 OutBorderTextFormField(
+                  
                     labelText: AppLocalizations.of(context)!.defaultInput,
                     hintText: AppLocalizations.of(context)!.defaultInput),
                 const SizedBox(
