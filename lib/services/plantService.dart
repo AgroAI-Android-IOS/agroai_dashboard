@@ -4,7 +4,8 @@ import 'package:http/http.dart' as http;
 
 class PlantService {
   static const String url = 'http://localhost:3050/api/v1/plant';
-    final String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3M2NjMDBjNWQxMTcwYzY3MTg2YTVkMiIsIm5hbWUiOiJhaG1lZCIsImVtYWlsIjoiYWhtZWR0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTczMzEzNTg2NCwiZXhwIjoxNzMzMjIyMjY0fQ.E3VXUKtT0FOFmHuQkYXwhR17Sl_RqsT9tGhQYjPet3c';
+  final String token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3M2NjMDBjNWQxMTcwYzY3MTg2YTVkMiIsIm5hbWUiOiJhaG1lZCIsImVtYWlsIjoiYWhtZWR0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTczMzEzNTg2NCwiZXhwIjoxNzMzMjIyMjY0fQ.E3VXUKtT0FOFmHuQkYXwhR17Sl_RqsT9tGhQYjPet3c';
 
   // Fetch all plants
   Future<List<Plant>> fetchPlants() async {
@@ -36,7 +37,7 @@ class PlantService {
     }
   }
 
-    Future<bool> addPlant(Plant plant) async {
+  Future<bool> addPlant(Plant plant) async {
     final String url = 'http://localhost:3050/api/v1/plant';
 
     final Map<String, dynamic> plantData = {
@@ -67,9 +68,9 @@ class PlantService {
       return false; // Return false if an error occurs
     }
   }
+
 // Delete a plant by ID
   Future<bool> deletePlant(String id) async {
-
     try {
       final response = await http.delete(
         Uri.parse('$url/$id'), // Add the plant ID to the URL
@@ -93,4 +94,41 @@ class PlantService {
       throw Exception('Failed to delete plant');
     }
   }
+
+  Future<bool> updatePlant(Plant plant) async {
+  final String url = 'http://localhost:3050/api/v1/plant/${plant.id}'; // URL to update the specific plant
+
+  // Prepare the updated plant data (taking the values from the Plant object)
+  final Map<String, dynamic> updatedPlantData = {
+    'name': plant.name,
+    'description': plant.description,
+    'image': plant.image,
+  };
+
+  try {
+    final response = await http.patch(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(updatedPlantData), // Send the updated plant data as JSON
+    );
+
+    if (response.statusCode == 200) {
+      // Successfully updated the plant
+      print('Plant updated successfully!');
+      return true;
+    } else {
+      // Handle failure (e.g., validation error, server error)
+      print('Failed to update plant: ${response.body}');
+      return false;
+    }
+  } catch (e) {
+    // Handle any errors that occur (e.g., network issue)
+    print('Error updating plant: $e');
+    return false;
+  }
+}
+
 }
