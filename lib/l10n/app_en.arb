@@ -156,5 +156,8 @@
   "roleHint": "Enter role",
   "userList": "User List",
   "createUser": "Create User",
-  "saveUser": "Save User"
+  "saveUser": "Save User",
+  "title": "Title",
+  "content" : "content"
+
 }

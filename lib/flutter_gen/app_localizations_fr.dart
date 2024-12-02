@@ -470,4 +470,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get saveUser => 'Enregistrer l\'utilisateur';
+
+  @override
+  String get title => 'Titre';
+
+  @override
+  String get content => 'Contenu';
 }

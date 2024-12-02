@@ -470,4 +470,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveUser => 'Save User';
+
+  @override
+  String get title => 'Title';
+
+  @override
+  String get content => 'content';
 }
