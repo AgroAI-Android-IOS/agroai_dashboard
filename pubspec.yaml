@@ -105,6 +105,7 @@ dependencies:
 
   flareline_uikit:
    path: FlareLine-UiKit
+  http: ^1.2.2
 
 
 dependency_overrides:

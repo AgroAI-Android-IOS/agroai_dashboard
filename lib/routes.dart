@@ -26,6 +26,8 @@ import 'package:flareline/pages/table/tables_page.dart' deferred as tables;
 import 'package:flareline/pages/toast/toast_page.dart' deferred as toast;
 import 'package:flareline/pages/tools/tools_page.dart' deferred as tools;
 import 'package:flutter/material.dart';
+import 'package:flareline/pages/Plants/View/PlantList.dart' deferred as plants;
+
 
 typedef PathWidgetBuilder = Widget Function(BuildContext, String?);
 
@@ -35,6 +37,10 @@ final List<Map<String, Object>> MAIN_PAGES = [
     'routerPath': '/calendar',
     'widget':
         DeferredWidget(calendar.loadLibrary, () => calendar.CalendarPage())
+  },
+  {
+    'routerPath': '/plants', // Update this with the desired path for Plants
+    'widget': DeferredWidget(plants.loadLibrary, () => plants.PlantListPage())
   },
   {
     'routerPath': '/profile',
