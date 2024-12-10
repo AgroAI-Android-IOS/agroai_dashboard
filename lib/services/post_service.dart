@@ -60,7 +60,7 @@ import 'package:http/http.dart' as http;
 import '../pages/models/post.dart';
 
 class PostService {
-  static const String baseUrl = 'http://192.168.1.121:3000/api/v1/post';
+  static const String baseUrl = 'http://localhost:3000/api/v1/post';
   Future<List<Post>> fetchPosts() async {
     try {
       print('Sending GET request to $baseUrl');
@@ -101,7 +101,7 @@ class PostService {
   /// Deletes a post with the given ID from the server
   Future<void> deletePost(String postId) async {
     final url =
-        'http://192.168.1.121:3000/api/v1/post/$postId'; // Replace with your backend endpoint
+        'http://localhost:3000/api/v1/post/$postId'; // Replace with your backend endpoint
     try {
       final response = await http.delete(
         Uri.parse(url),

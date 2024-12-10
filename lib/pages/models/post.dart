@@ -1,5 +1,5 @@
 class Post {
-  final String id; // Add this field
+  final String id;
   final String title;
   final String content;
   final String user;
@@ -9,7 +9,7 @@ class Post {
   final List<String> dislikes;
 
   Post({
-    required this.id, // Add this parameter
+    required this.id,
     required this.title,
     required this.content,
     required this.user,
