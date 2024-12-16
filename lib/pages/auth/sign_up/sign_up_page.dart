@@ -1,12 +1,11 @@
+import 'package:flareline/flutter_gen/app_localizations.dart';
 import 'package:flareline/pages/auth/sign_up/sign_up_provider.dart';
-import 'package:flareline_uikit/core/mvvm/base_widget.dart';
-import 'package:flutter/material.dart';
-
-import 'package:flutter_svg/svg.dart';
 import 'package:flareline_uikit/components/buttons/button_widget.dart';
 import 'package:flareline_uikit/components/card/common_card.dart';
 import 'package:flareline_uikit/components/forms/outborder_text_form_field.dart';
-import 'package:flareline/flutter_gen/app_localizations.dart';
+import 'package:flareline_uikit/core/mvvm/base_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class SignUpWidget extends BaseWidget<SignUpProvider> {
@@ -20,11 +19,11 @@ class SignUpWidget extends BaseWidget<SignUpProvider> {
         // Check the sizing information here and return your UI
         if (sizingInformation.deviceScreenType == DeviceScreenType.desktop) {
           return Center(
-            child: contentDesktopWidget(context,viewModel),
+            child: contentDesktopWidget(context, viewModel),
           );
         }
 
-        return contentMobileWidget(context,viewModel);
+        return contentMobileWidget(context, viewModel);
       },
     ));
   }
@@ -65,7 +64,7 @@ class SignUpWidget extends BaseWidget<SignUpProvider> {
           const VerticalDivider(
             width: 1,
           ),
-          Expanded(child: _formWidget(context,viewModel))
+          Expanded(child: _formWidget(context, viewModel))
         ]),
       ),
     ]);
@@ -74,7 +73,7 @@ class SignUpWidget extends BaseWidget<SignUpProvider> {
   Widget contentMobileWidget(BuildContext context, SignUpProvider viewModel) {
     return CommonCard(
       padding: const EdgeInsets.symmetric(vertical: 60),
-      child: _formWidget(context,viewModel),
+      child: _formWidget(context, viewModel),
     );
   }
 
@@ -106,6 +105,11 @@ class SignUpWidget extends BaseWidget<SignUpProvider> {
             ),
             controller: viewModel.emailController,
           ),
+          if (viewModel.emailError != null)
+            Text(
+              viewModel.emailError!,
+              style: TextStyle(color: Colors.red),
+            ),
           const SizedBox(
             height: 16,
           ),
@@ -120,6 +124,11 @@ class SignUpWidget extends BaseWidget<SignUpProvider> {
             ),
             controller: viewModel.passwordController,
           ),
+          if (viewModel.passwordError != null)
+            Text(
+              viewModel.passwordError!,
+              style: TextStyle(color: Colors.red),
+            ),
           const SizedBox(
             height: 20,
           ),
@@ -134,8 +143,40 @@ class SignUpWidget extends BaseWidget<SignUpProvider> {
             ),
             controller: viewModel.rePasswordController,
           ),
+          if (viewModel.rePasswordError != null)
+            Text(
+              viewModel.rePasswordError!,
+              style: TextStyle(color: Colors.red),
+            ),
           const SizedBox(
             height: 20,
+          ),
+          OutBorderTextFormField(
+            labelText: AppLocalizations.of(context)!.name,
+            hintText: AppLocalizations.of(context)!.nameHint,
+            controller: viewModel.nameController,
+          ),
+          if (viewModel.nameError != null)
+            Text(
+              viewModel.nameError!,
+              style: TextStyle(color: Colors.red),
+            ),
+          const SizedBox(
+            height: 16,
+          ),
+          OutBorderTextFormField(
+            labelText: AppLocalizations.of(context)!.phone,
+            hintText: AppLocalizations.of(context)!.phoneHint,
+            keyboardType: TextInputType.phone,
+            controller: viewModel.phoneController,
+          ),
+          if (viewModel.phoneError != null)
+            Text(
+              viewModel.phoneError!,
+              style: TextStyle(color: Colors.red),
+            ),
+          const SizedBox(
+            height: 16,
           ),
           ButtonWidget(
             type: ButtonType.primary.type,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/post.dart'; // Import your Post model
+
+import '../../models/post.dart'; // Import your Post model
 import '../../services/post_service.dart';
 
 class PostTablePage extends StatefulWidget {
@@ -38,7 +39,7 @@ class _PostTablePageState extends State<PostTablePage> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Post '${post.title}' deleted successfully")),
+        SnackBar(content: Text("Post '${post.content}' deleted successfully")),
       );
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -62,7 +63,7 @@ class _PostTablePageState extends State<PostTablePage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content:
-                  Text("Post '${updatedPost.title}' updated successfully")),
+                  Text("Post '${updatedPost.content}' updated successfully")),
         );
       }
     } catch (error) {
@@ -73,7 +74,6 @@ class _PostTablePageState extends State<PostTablePage> {
   }
 
   Future<Post?> _showUpdateDialog(Post post) async {
-    final titleController = TextEditingController(text: post.title);
     final contentController = TextEditingController(text: post.content);
 
     return showDialog<Post?>(
@@ -82,19 +82,10 @@ class _PostTablePageState extends State<PostTablePage> {
         return AlertDialog(
           title: Text("Update Post",
               style: TextStyle(fontWeight: FontWeight.bold)),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: titleController,
-                decoration: InputDecoration(labelText: "Title"),
-              ),
-              TextField(
-                controller: contentController,
-                decoration: InputDecoration(labelText: "Content"),
-                maxLines: 3,
-              ),
-            ],
+          content: TextField(
+            controller: contentController,
+            decoration: InputDecoration(labelText: "Content"),
+            maxLines: 3,
           ),
           actions: [
             TextButton(
@@ -109,7 +100,6 @@ class _PostTablePageState extends State<PostTablePage> {
               onPressed: () {
                 final updatedPost = Post(
                   id: post.id,
-                  title: titleController.text,
                   content: contentController.text,
                   user: post.user,
                   isArchived: post.isArchived,
@@ -167,7 +157,6 @@ class _PostTablePageState extends State<PostTablePage> {
                   headingTextStyle: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.blueGrey),
                   columns: [
-                    DataColumn(label: Text('Title')),
                     DataColumn(label: Text('Content')),
                     DataColumn(label: Text('User')),
                     DataColumn(label: Text('Likes')),
@@ -179,18 +168,11 @@ class _PostTablePageState extends State<PostTablePage> {
                     return DataRow(cells: [
                       DataCell(
                         Text(
-                          post.title,
+                          post.content,
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
                       ),
-                      DataCell(
-                        Text(
-                          post.content,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      DataCell(Text(post.user)),
+                      DataCell(Text(post.user.name)), // Display user name
                       DataCell(Text(post.likes.length.toString())),
                       DataCell(Text(post.dislikes.length.toString())),
                       DataCell(
@@ -232,7 +214,7 @@ class _PostTablePageState extends State<PostTablePage> {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           content: Text(
-            "Are you sure you want to delete the post '${post.title}'?",
+            "Are you sure you want to delete the post '${post.content}'?",
             style: TextStyle(color: Colors.black87),
           ),
           actions: [

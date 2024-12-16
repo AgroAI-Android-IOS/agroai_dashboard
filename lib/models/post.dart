@@ -1,18 +1,18 @@
+import 'user.dart'; // Import the User model
+
 class Post {
-  final String id; // Add this field
-  final String title;
+  final String id;
   final String content;
-  final String user;
+  final User user; // Change type to User
   final bool isArchived;
   final List<Comment> comments;
   final List<String> likes;
   final List<String> dislikes;
 
   Post({
-    required this.id, // Add this parameter
-    required this.title,
+    required this.id,
     required this.content,
-    required this.user,
+    required this.user, // Change type to User
     required this.isArchived,
     required this.comments,
     required this.likes,
@@ -25,15 +25,26 @@ class Post {
         commentsList.map((i) => Comment.fromJson(i)).toList();
 
     return Post(
-      id: json['_id'], // Map `_id` from the backend to `id`
-      title: json['title'],
+      id: json['_id'],
       content: json['content'],
-      user: json['user'],
+      user: User.fromJson(json['user']), // Parse user as User
       isArchived: json['isArchived'],
       comments: comments,
       likes: List<String>.from(json['likes']),
       dislikes: List<String>.from(json['dislikes']),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'content': content,
+      'user': user.toJson(), // Convert user to JSON
+      'isArchived': isArchived,
+      'comments': comments.map((comment) => comment.toJson()).toList(),
+      'likes': likes,
+      'dislikes': dislikes,
+    };
   }
 }
 
@@ -48,5 +59,12 @@ class Comment {
       content: json['content'],
       user: json['user'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'content': content,
+      'user': user,
+    };
   }
 }

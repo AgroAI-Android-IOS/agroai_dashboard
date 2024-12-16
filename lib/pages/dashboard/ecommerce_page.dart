@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
-
 import 'package:flareline/pages/dashboard/analytics_widget.dart';
 import 'package:flareline/pages/dashboard/channel_widget.dart';
 import 'package:flareline/pages/dashboard/grid_card.dart';
 import 'package:flareline/pages/dashboard/revenue_widget.dart';
 import 'package:flareline/pages/layout.dart';
+import 'package:flutter/material.dart';
 
 class EcommercePage extends LayoutWidget {
   const EcommercePage({super.key});
@@ -14,6 +13,7 @@ class EcommercePage extends LayoutWidget {
     // TODO: implement breakTabTitle
     return 'Ecommerce';
   }
+
   @override
   Widget contentDesktopWidget(BuildContext context) {
     return const Column(children: [
@@ -32,5 +32,4 @@ class EcommercePage extends LayoutWidget {
       ChannelWidget()
     ]);
   }
-
 }

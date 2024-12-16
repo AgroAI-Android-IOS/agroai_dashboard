@@ -157,5 +157,7 @@
   "createUser": "Créer un utilisateur",
   "saveUser": "Enregistrer l'utilisateur",
   "title": "Titre",
-  "content": "Contenu"
+  "content": "Contenu",
+  "phone": "Téléphone",
+  "phoneHint": "Entrez votre numéro de téléphone"
 }

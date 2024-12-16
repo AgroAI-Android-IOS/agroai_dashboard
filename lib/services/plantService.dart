@@ -1,29 +1,31 @@
 import 'dart:convert';
+
+import 'package:flareline/core/constant.dart';
 import 'package:flareline/pages/Plants/Model/plantModel.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PlantService {
-  static const String url = 'http://localhost:3050/api/v1/plant';
-  final String token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3M2NjMDBjNWQxMTcwYzY3MTg2YTVkMiIsIm5hbWUiOiJhaG1lZCIsImVtYWlsIjoiYWhtZWR0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTczMzEzNTg2NCwiZXhwIjoxNzMzMjIyMjY0fQ.E3VXUKtT0FOFmHuQkYXwhR17Sl_RqsT9tGhQYjPet3c';
+  static const String baseUrl = '${Constant.baseUrl}/plant';
+
+  Future<String> _getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    print(prefs.getString("token"));
+    return prefs.getString('token') ?? '';
+  }
 
   // Fetch all plants
   Future<List<Plant>> fetchPlants() async {
-    final String url = 'http://127.0.0.1:3050/api/v1/plant';
-    final String token =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3M2NjMDBjNWQxMTcwYzY3MTg2YTVkMiIsIm5hbWUiOiJhaG1lZCIsImVtYWlsIjoiYWhtZWR0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTczMzEzNTg2NCwiZXhwIjoxNzMzMjIyMjY0fQ.E3VXUKtT0FOFmHuQkYXwhR17Sl_RqsT9tGhQYjPet3c';
+    final String token = await _getToken();
 
     try {
       final response = await http.get(
-        Uri.parse(url),
+        Uri.parse(baseUrl),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json', // Optional, depending on your API
         },
       );
-
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
         List jsonResponse = json.decode(response.body);
@@ -38,17 +40,20 @@ class PlantService {
   }
 
   Future<bool> addPlant(Plant plant) async {
-    final String url = 'http://localhost:3050/api/v1/plant';
-
+    print("*****************");
+    final String token = await _getToken();
+    print(token);
     final Map<String, dynamic> plantData = {
       'name': plant.name,
       'description': plant.description,
       'image': plant.image,
     };
 
+    print(token);
+
     try {
       final response = await http.post(
-        Uri.parse(url),
+        Uri.parse(baseUrl),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -69,11 +74,13 @@ class PlantService {
     }
   }
 
-// Delete a plant by ID
+  // Delete a plant by ID
   Future<bool> deletePlant(String id) async {
+    final String token = await _getToken();
+
     try {
       final response = await http.delete(
-        Uri.parse('$url/$id'), // Add the plant ID to the URL
+        Uri.parse('$baseUrl/$id'), // Add the plant ID to the URL
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -96,39 +103,41 @@ class PlantService {
   }
 
   Future<bool> updatePlant(Plant plant) async {
-  final String url = 'http://localhost:3050/api/v1/plant/${plant.id}'; // URL to update the specific plant
+    final String url =
+        '$baseUrl/${plant.id}'; // URL to update the specific plant
+    final String token = await _getToken();
 
-  // Prepare the updated plant data (taking the values from the Plant object)
-  final Map<String, dynamic> updatedPlantData = {
-    'name': plant.name,
-    'description': plant.description,
-    'image': plant.image,
-  };
+    // Prepare the updated plant data (taking the values from the Plant object)
+    final Map<String, dynamic> updatedPlantData = {
+      'name': plant.name,
+      'description': plant.description,
+      'image': plant.image,
+    };
 
-  try {
-    final response = await http.patch(
-      Uri.parse(url),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-      body: json.encode(updatedPlantData), // Send the updated plant data as JSON
-    );
+    try {
+      final response = await http.patch(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: json
+            .encode(updatedPlantData), // Send the updated plant data as JSON
+      );
 
-    if (response.statusCode == 200) {
-      // Successfully updated the plant
-      print('Plant updated successfully!');
-      return true;
-    } else {
-      // Handle failure (e.g., validation error, server error)
-      print('Failed to update plant: ${response.body}');
+      if (response.statusCode == 200) {
+        // Successfully updated the plant
+        print('Plant updated successfully!');
+        return true;
+      } else {
+        // Handle failure (e.g., validation error, server error)
+        print('Failed to update plant: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      // Handle any errors that occur (e.g., network issue)
+      print('Error updating plant: $e');
       return false;
     }
-  } catch (e) {
-    // Handle any errors that occur (e.g., network issue)
-    print('Error updating plant: $e');
-    return false;
   }
-}
-
 }

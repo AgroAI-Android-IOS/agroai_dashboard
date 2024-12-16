@@ -476,4 +476,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get content => 'content';
+
+  @override
+  String get phone => 'Phone';
+
+  @override
+  String get phoneHint => 'Enter your phone number';
 }

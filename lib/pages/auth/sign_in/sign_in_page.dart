@@ -1,14 +1,12 @@
+import 'package:flareline/core/theme/global_colors.dart';
+import 'package:flareline/flutter_gen/app_localizations.dart';
 import 'package:flareline/pages/auth/sign_in/sign_in_provider.dart';
-import 'package:flareline_uikit/core/mvvm/base_widget.dart';
-
-import 'package:flutter/material.dart';
-
-import 'package:flutter_svg/svg.dart';
 import 'package:flareline_uikit/components/buttons/button_widget.dart';
 import 'package:flareline_uikit/components/card/common_card.dart';
 import 'package:flareline_uikit/components/forms/outborder_text_form_field.dart';
-import 'package:flareline/core/theme/global_colors.dart';
-import 'package:flareline/flutter_gen/app_localizations.dart';
+import 'package:flareline_uikit/core/mvvm/base_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class SignInWidget extends BaseWidget<SignInProvider> {
@@ -24,7 +22,7 @@ class SignInWidget extends BaseWidget<SignInProvider> {
           );
         }
 
-        return contentMobileWidget(context,viewModel);
+        return contentMobileWidget(context, viewModel);
       },
     ));
   }
@@ -34,7 +32,7 @@ class SignInWidget extends BaseWidget<SignInProvider> {
     return SignInProvider(context);
   }
 
-  Widget contentDesktopWidget(BuildContext context,SignInProvider viewModel) {
+  Widget contentDesktopWidget(BuildContext context, SignInProvider viewModel) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -44,32 +42,32 @@ class SignInWidget extends BaseWidget<SignInProvider> {
           child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
             Expanded(
                 child: Column(
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.appName,
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Text(AppLocalizations.of(context)!.slogan),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    SizedBox(
-                      width: 350,
-                      child: SvgPicture.asset('assets/signin/main.svg',
-                          semanticsLabel: ''),
-                    )
-                  ],
-                )),
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.appName,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Text(AppLocalizations.of(context)!.slogan),
+                const SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  width: 350,
+                  child: SvgPicture.asset('assets/signin/main.svg',
+                      semanticsLabel: ''),
+                )
+              ],
+            )),
             const VerticalDivider(
               width: 1,
               color: GlobalColors.background,
             ),
             Expanded(
-              child: _signInFormWidget(context,viewModel),
+              child: _signInFormWidget(context, viewModel),
             )
           ]),
         )
@@ -78,13 +76,13 @@ class SignInWidget extends BaseWidget<SignInProvider> {
   }
 
   @override
-  Widget contentMobileWidget(BuildContext context,SignInProvider viewModel) {
+  Widget contentMobileWidget(BuildContext context, SignInProvider viewModel) {
     return CommonCard(
         padding: const EdgeInsets.symmetric(vertical: 60),
-        child: _signInFormWidget(context,viewModel));
+        child: _signInFormWidget(context, viewModel));
   }
 
-  Widget _signInFormWidget(BuildContext context,SignInProvider viewModel) {
+  Widget _signInFormWidget(BuildContext context, SignInProvider viewModel) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 50),
         child: Column(
@@ -145,59 +143,6 @@ class SignInWidget extends BaseWidget<SignInProvider> {
               btnText: AppLocalizations.of(context)!.signIn,
               onTap: () {
                 viewModel.signIn(context);
-              },
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                const Expanded(
-                    child: Divider(
-                      height: 1,
-                      color: GlobalColors.border,
-                    )),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(AppLocalizations.of(context)!.or),
-                ),
-                const Expanded(
-                    child: Divider(
-                      height: 1,
-                      color: GlobalColors.border,
-                    )),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            ButtonWidget(
-              color: Colors.white,
-              borderColor: GlobalColors.border,
-              iconWidget: SvgPicture.asset(
-                'assets/brand/brand-01.svg',
-                width: 25,
-                height: 25,
-              ),
-              btnText: AppLocalizations.of(context)!.signInWithGoogle,
-              onTap: () {
-                viewModel.signInWithGoogle(context);
-              },
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            ButtonWidget(
-              color: Colors.white,
-              borderColor: GlobalColors.border,
-              iconWidget: SvgPicture.asset(
-                'assets/brand/brand-03.svg',
-                width: 25,
-                height: 25,
-              ),
-              btnText: AppLocalizations.of(context)!.signInWithGithub,
-              onTap: () {
-                viewModel.signInWithGithub(context);
               },
             ),
             const SizedBox(

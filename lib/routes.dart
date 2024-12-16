@@ -1,13 +1,8 @@
 import 'package:flareline/deferred_widget.dart';
+import 'package:flareline/pages/Plants/View/PlantList.dart' deferred as plants;
 import 'package:flareline/pages/alerts/alert_page.dart' deferred as alert;
 import 'package:flareline/pages/auth/sign_in/sign_in_page.dart'
     deferred as signIn;
-
-// ignore: unused_import
-import 'package:flareline/pages/form/Add_post.dart' deferred as AddPost;
-// ignore: unused_import
-import 'package:flareline/pages/form/PostTablePage.dart' deferred as ViewPost;
-
 import 'package:flareline/pages/auth/sign_up/sign_up_page.dart'
     deferred as signUp;
 import 'package:flareline/pages/button/button_page.dart' deferred as button;
@@ -15,6 +10,8 @@ import 'package:flareline/pages/calendar/calendar_page.dart'
     deferred as calendar;
 import 'package:flareline/pages/chart/chart_page.dart' deferred as chart;
 import 'package:flareline/pages/dashboard/ecommerce_page.dart';
+// ignore: unused_import
+import 'package:flareline/pages/form/Add_post.dart' deferred as AddPost;
 import 'package:flareline/pages/form/form_elements_page.dart'
     deferred as formElements;
 import 'package:flareline/pages/form/form_layout_page.dart'
@@ -22,6 +19,8 @@ import 'package:flareline/pages/form/form_layout_page.dart'
 import 'package:flareline/pages/inbox/index.dart' deferred as inbox;
 import 'package:flareline/pages/invoice/invoice_page.dart' deferred as invoice;
 import 'package:flareline/pages/modal/modal_page.dart' deferred as modal;
+// ignore: unused_import
+import 'package:flareline/pages/post/PostTablePage.dart' deferred as ViewPost;
 import 'package:flareline/pages/profile/profile_page.dart' deferred as profile;
 import 'package:flareline/pages/resetpwd/reset_pwd_page.dart'
     deferred as resetPwd;
@@ -31,8 +30,8 @@ import 'package:flareline/pages/table/contacts_page.dart' deferred as contacts;
 import 'package:flareline/pages/table/tables_page.dart' deferred as tables;
 import 'package:flareline/pages/toast/toast_page.dart' deferred as toast;
 import 'package:flareline/pages/tools/tools_page.dart' deferred as tools;
+import 'package:flareline/pages/user/user_page.dart' deferred as user;
 import 'package:flutter/material.dart';
-import 'package:flareline/pages/Plants/View/PlantList.dart' deferred as plants;
 
 typedef PathWidgetBuilder = Widget Function(BuildContext, String?);
 
@@ -128,6 +127,10 @@ final List<Map<String, Object>> MAIN_PAGES = [
     'routerPath': '/viewpost',
     'widget':
         DeferredWidget(ViewPost.loadLibrary, () => ViewPost.PostTablePage()),
+  },
+  {
+    'routerPath': '/user',
+    'widget': DeferredWidget(user.loadLibrary, () => user.UserPage())
   }
 ];
 

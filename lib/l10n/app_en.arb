@@ -158,6 +158,7 @@
   "createUser": "Create User",
   "saveUser": "Save User",
   "title": "Title",
-  "content" : "content"
-
+  "content" : "content",
+  "phone": "Phone",
+  "phoneHint": "Enter your phone number"
 }
