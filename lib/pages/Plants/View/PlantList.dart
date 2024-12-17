@@ -1,9 +1,16 @@
-import 'package:flareline/pages/Plants/View/CreatePlantPage.dart';
+import 'package:flareline/pages/Plants/View/PlantDetailPage.dart';
 import 'package:flutter/material.dart';
-import 'package:flareline/services/plantService.dart'; // Import the PlantService
-import 'package:flareline/pages/Plants/View/PlantDetailPage.dart'; // Import the PlantDetailPage
+import 'package:flareline/pages/Plants/View/CreatePlantPage.dart';
+import 'package:flareline/services/plantService.dart';
 import 'package:flareline/pages/Plants/Model/plantModel.dart';
+import 'package:flareline/core/theme/global_colors.dart';
+import 'package:flareline_uikit/components/card/common_card.dart';
 import 'package:http/http.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:provider/provider.dart';
+import 'package:flareline/pages/Plants/Providers/plant_provider.dart';
 
 class PlantListPage extends StatefulWidget {
   @override
@@ -12,18 +19,17 @@ class PlantListPage extends StatefulWidget {
 
 class _PlantListPageState extends State<PlantListPage> {
   List<Plant> plants = [];
-  List<Plant> filteredPlants = []; // List to store filtered plants
+  List<Plant> filteredPlants = [];
   bool isLoading = false;
-  TextEditingController _searchController = TextEditingController(); // Controller for search bar
+  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     loadPlants();
-    _searchController.addListener(_onSearchChanged); // Listen for search query changes
+    _searchController.addListener(_onSearchChanged);
   }
 
-  // Load plants from the API
   Future<void> loadPlants() async {
     setState(() {
       isLoading = true;
@@ -33,10 +39,9 @@ class _PlantListPageState extends State<PlantListPage> {
       List<Plant> fetchedPlants = await PlantService().fetchPlants();
       setState(() {
         plants = fetchedPlants;
-        filteredPlants = fetchedPlants; // Initially, show all plants
+        filteredPlants = fetchedPlants;
       });
     } catch (e) {
-      // Handle the error here
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to load plants')));
     } finally {
       setState(() {
@@ -45,29 +50,26 @@ class _PlantListPageState extends State<PlantListPage> {
     }
   }
 
-  // Handle search query change
   void _onSearchChanged() {
     String query = _searchController.text.toLowerCase();
     List<Plant> results = plants.where((plant) {
       return plant.name.toLowerCase().contains(query) ||
-             plant.description.toLowerCase().contains(query); // Filter by name or description
+             plant.description.toLowerCase().contains(query);
     }).toList();
 
     setState(() {
-      filteredPlants = results; // Update filtered plant list
+      filteredPlants = results;
     });
   }
 
-  // Update a plant's details
   Future<void> updatePlant(Plant plant) async {
     final updatedPlant = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CreatePlantPage(plant: plant), // Pass the plant to the update page
+        builder: (context) => CreatePlantPage(plant: plant),
       ),
     );
     if (updatedPlant != null) {
-      // If the plant is updated, reload the plants list
       loadPlants();
     }
   }
@@ -80,12 +82,14 @@ class _PlantListPageState extends State<PlantListPage> {
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () {
-              // Navigate to CreatePlantPage
-              Navigator.push(
+            onPressed: () async {
+              final result = await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CreatePlantPage()),
-              ).then((_) => loadPlants());  // Reload plants after adding a new one
+              );
+              if (result == true) {
+                loadPlants();
+              }
             },
           ),
         ],
@@ -123,15 +127,13 @@ class _PlantListPageState extends State<PlantListPage> {
             ListTile(
               title: Text('Plants'),
               onTap: () {
-                Navigator.pop(context); // Close the drawer
-                // Navigate to the same PlantListPage
+                Navigator.pop(context);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => PlantListPage()),
                 );
               },
             ),
-            // Add more ListTiles here for other pages if needed
           ],
         ),
       ),
@@ -143,69 +145,80 @@ class _PlantListPageState extends State<PlantListPage> {
                   itemCount: filteredPlants.length,
                   itemBuilder: (context, index) {
                     final plant = filteredPlants[index];
-                    return ListTile(
-                      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                      leading: Image.network(
-                        plant.image,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
+                    return CommonCard(
+                      child: ListTile(
+                        contentPadding: EdgeInsets.all(10),
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: kIsWeb
+                              ? Image.memory(
+                                  base64Decode(plant.image),
+                                  width: 50,
+                                  height: 50,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.file(
+                                  File(plant.image),
+                                  width: 50,
+                                  height: 50,
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                        title: Text(
+                          plant.name,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(plant.description),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.edit, color: Colors.blue),
+                              onPressed: () {
+                                updatePlant(plant);
+                              },
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.delete, color: Colors.red),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Delete Plant'),
+                                      content: Text('Are you sure you want to delete this plant?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            await PlantService().deletePlant(plant.id);
+                                            loadPlants();
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('Delete'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PlantDetailPage(plant: plant),
+                            ),
+                          );
+                        },
                       ),
-                      title: Text(plant.name),
-                      subtitle: Text(plant.description),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // Update Button
-                          IconButton(
-                            icon: Icon(Icons.edit, color: Colors.blue),
-                            onPressed: () {
-                              // Navigate to Update Plant Page
-                              updatePlant(plant);
-                            },
-                          ),
-                          // Delete Button
-                          IconButton(
-                            icon: Icon(Icons.delete, color: Colors.red),
-                            onPressed: () {
-                              // Confirm before deleting
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text('Delete Plant'),
-                                    content: Text('Are you sure you want to delete this plant?'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text('Cancel'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () async {
-                                          await PlantService().deletePlant(plant.id);
-                                          loadPlants();  // Refresh the plant list after deletion
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text('Delete'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PlantDetailPage(plant: plant),
-                          ),
-                        );
-                      },
                     );
                   },
                 ),

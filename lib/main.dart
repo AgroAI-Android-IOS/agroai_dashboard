@@ -1,5 +1,6 @@
 import 'package:flareline/core/theme/global_theme.dart';
 import 'package:flareline/flutter_gen/app_localizations.dart';
+import 'package:flareline/pages/Plants/Providers/plant_provider.dart';
 import 'package:flareline/routes.dart'; // Import your routes file
 import 'package:flareline_uikit/service/localization_provider.dart';
 import 'package:flareline_uikit/service/theme_provider.dart';
@@ -32,7 +33,14 @@ void main() async {
     });
   }
 
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => PlantProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
