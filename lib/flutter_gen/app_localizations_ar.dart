@@ -477,4 +477,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get title => 'حفظ';
   @override
   String get content => ' دم حفظ';
+  
+  @override
+  // TODO: implement phone
+  String get phone => throw UnimplementedError();
+  
+  @override
+  // TODO: implement phoneHint
+  String get phoneHint => throw UnimplementedError();
 }

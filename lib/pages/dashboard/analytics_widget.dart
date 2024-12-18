@@ -48,7 +48,8 @@ class AnalyticsWidget extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text('Plant Distribution by Type', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text('Plant Distribution by Type',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             SizedBox(height: 200, child: charts.PieChart(plantTypeData)),
           ],
         ),
@@ -65,22 +66,29 @@ class AnalyticsWidget extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text('Plants Added Over Time', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 200, child: charts.TimeSeriesChart(plantAddedData)),
+            Text('Plants Added Over Time',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            SizedBox(
+                height: 200, child: charts.TimeSeriesChart(plantAddedData)),
           ],
         ),
       ),
     );
   }
 
-  List<charts.Series<PlantTypeData, String>> _getPlantTypeData(List<Plant> plants) {
+  List<charts.Series<PlantTypeData, String>> _getPlantTypeData(
+      List<Plant> plants) {
     final data = <String, int>{};
 
     for (var plant in plants) {
-      data[plant.type] = (data[plant.type] ?? 0) + 1;
+      if (plant.type != null) {
+        data[plant.type!] = (data[plant.type!] ?? 0) + 1;
+      }
     }
 
-    final chartData = data.entries.map((entry) => PlantTypeData(entry.key, entry.value)).toList();
+    final chartData = data.entries
+        .map((entry) => PlantTypeData(entry.key, entry.value))
+        .toList();
 
     return [
       charts.Series<PlantTypeData, String>(
@@ -93,15 +101,19 @@ class AnalyticsWidget extends StatelessWidget {
     ];
   }
 
-  List<charts.Series<PlantAddedData, DateTime>> _getPlantAddedData(List<Plant> plants) {
+  List<charts.Series<PlantAddedData, DateTime>> _getPlantAddedData(
+      List<Plant> plants) {
     final data = <DateTime, int>{};
 
     for (var plant in plants) {
-      final date = DateTime(plant.addedDate.year, plant.addedDate.month, plant.addedDate.day);
+      final date = DateTime(
+          plant.createdAt.year, plant.createdAt.month, plant.createdAt.day);
       data[date] = (data[date] ?? 0) + 1;
     }
 
-    final chartData = data.entries.map((entry) => PlantAddedData(entry.key, entry.value)).toList();
+    final chartData = data.entries
+        .map((entry) => PlantAddedData(entry.key, entry.value))
+        .toList();
 
     return [
       charts.Series<PlantAddedData, DateTime>(

@@ -41,7 +41,8 @@ class _CreatePlantPageState extends State<CreatePlantPage> {
   }
 
   Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       if (kIsWeb) {
         final bytes = await pickedFile.readAsBytes();
@@ -57,7 +58,8 @@ class _CreatePlantPageState extends State<CreatePlantPage> {
   }
 
   Future<void> _fetchDescription() async {
-    final String apiKey = 'AIzaSyD9STijq89USEXgl0yTGrisYa07YDu-yK0'; // Replace with your Gemini AI API key
+    final String apiKey =
+        'AIzaSyD9STijq89USEXgl0yTGrisYa07YDu-yK0'; // Replace with your Gemini AI API key
     final String plantName = _nameController.text;
 
     if (plantName.isEmpty) {
@@ -77,7 +79,8 @@ class _CreatePlantPageState extends State<CreatePlantPage> {
     try {
       print('Fetching description for plant: $plantName');
       final response = await http.post(
-        Uri.parse('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=$apiKey'),
+        Uri.parse(
+            'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=$apiKey'),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -85,7 +88,10 @@ class _CreatePlantPageState extends State<CreatePlantPage> {
           "contents": [
             {
               "parts": [
-                {"text": "Describe the plant named $plantName. Include care instructions such as watering frequency, sunlight requirements, and ease of care in a short paragraph."}
+                {
+                  "text":
+                      "Describe the plant named $plantName. Include care instructions such as watering frequency, sunlight requirements, and ease of care in a short paragraph."
+                }
               ]
             }
           ]
@@ -98,7 +104,8 @@ class _CreatePlantPageState extends State<CreatePlantPage> {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         setState(() {
-          _descriptionController.text = data['candidates'][0]['content']['parts'][0]['text'];
+          _descriptionController.text =
+              data['candidates'][0]['content']['parts'][0]['text'];
         });
       } else {
         QuickAlert.show(
@@ -123,7 +130,9 @@ class _CreatePlantPageState extends State<CreatePlantPage> {
   }
 
   Future<void> _submitPlant() async {
-    if (_nameController.text.isEmpty || _descriptionController.text.isEmpty || (_imageFile == null && _webImage == null && widget.plant == null)) {
+    if (_nameController.text.isEmpty ||
+        _descriptionController.text.isEmpty ||
+        (_imageFile == null && _webImage == null && widget.plant == null)) {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
@@ -139,19 +148,25 @@ class _CreatePlantPageState extends State<CreatePlantPage> {
 
     try {
       Plant newPlant = Plant(
-        id: widget.plant?.id ?? '', // Provide a default value or generate a new ID
+        id: widget.plant?.id ??
+            '', // Provide a default value or generate a new ID
         name: _nameController.text,
         description: _descriptionController.text,
-        image: _webImage != null ? base64Encode(_webImage!) : _imageFile?.path ?? widget.plant?.image ?? '',
-        addedDate: widget.plant?.addedDate ?? DateTime.now(), // Add the addedDate parameter
+        image: _webImage != null
+            ? base64Encode(_webImage!)
+            : _imageFile?.path ?? widget.plant?.image ?? '',
+        createdAt: widget.plant?.createdAt ??
+            DateTime.now(), // Add the createdAt parameter
         type: widget.plant?.type ?? 'defaultType', // Add the type parameter
       );
 
       bool success;
       if (widget.plant != null) {
-        success = await Provider.of<PlantProvider>(context, listen: false).updatePlant(newPlant); // Update the plant
+        success = await Provider.of<PlantProvider>(context, listen: false)
+            .updatePlant(newPlant); // Update the plant
       } else {
-        success = await Provider.of<PlantProvider>(context, listen: false).addPlant(newPlant); // Add a new plant
+        success = await Provider.of<PlantProvider>(context, listen: false)
+            .addPlant(newPlant); // Add a new plant
       }
 
       if (success) {
@@ -159,7 +174,9 @@ class _CreatePlantPageState extends State<CreatePlantPage> {
           context: context,
           type: QuickAlertType.success,
           title: 'Success',
-          text: widget.plant != null ? 'Plant updated successfully' : 'Plant added successfully',
+          text: widget.plant != null
+              ? 'Plant updated successfully'
+              : 'Plant added successfully',
           onConfirmBtnTap: () {
             Navigator.pop(context, true);
           },
@@ -169,7 +186,9 @@ class _CreatePlantPageState extends State<CreatePlantPage> {
           context: context,
           type: QuickAlertType.error,
           title: 'Error',
-          text: widget.plant != null ? 'Failed to update plant' : 'Failed to add plant',
+          text: widget.plant != null
+              ? 'Failed to update plant'
+              : 'Failed to add plant',
         );
       }
     } catch (e) {
@@ -234,7 +253,8 @@ class _CreatePlantPageState extends State<CreatePlantPage> {
                                 color: Colors.grey[200],
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Icon(Icons.add_a_photo, color: Colors.grey[800]),
+                              child: Icon(Icons.add_a_photo,
+                                  color: Colors.grey[800]),
                             )
                           : ClipRRect(
                               borderRadius: BorderRadius.circular(10),
@@ -253,7 +273,8 @@ class _CreatePlantPageState extends State<CreatePlantPage> {
                                 color: Colors.grey[200],
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Icon(Icons.add_a_photo, color: Colors.grey[800]),
+                              child: Icon(Icons.add_a_photo,
+                                  color: Colors.grey[800]),
                             )
                           : ClipRRect(
                               borderRadius: BorderRadius.circular(10),
@@ -269,11 +290,13 @@ class _CreatePlantPageState extends State<CreatePlantPage> {
                 ElevatedButton(
                   onPressed: _submitPlant,
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 12),
                   ),
                   child: _isLoading
                       ? CircularProgressIndicator(color: Colors.white)
-                      : Text(widget.plant == null ? 'Add Plant' : 'Update Plant'),
+                      : Text(
+                          widget.plant == null ? 'Add Plant' : 'Update Plant'),
                 ),
               ],
             ),

@@ -27,13 +27,15 @@ class PlantProvider with ChangeNotifier {
   }
 
   Future<void> _fetchPlantTypes() async {
-    final String apiKey = 'YOUR_GEMINI_AI_API_KEY'; // Replace with your Gemini AI API key
+    final String apiKey =
+        'YOUR_GEMINI_AI_API_KEY'; // Replace with your Gemini AI API key
 
     for (var plant in _plants) {
-      if (plant.type.isEmpty) {
+      if (plant.type!.isEmpty) {
         try {
           final response = await http.post(
-            Uri.parse('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=$apiKey'),
+            Uri.parse(
+                'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=$apiKey'),
             headers: {
               'Content-Type': 'application/json',
             },
@@ -41,7 +43,10 @@ class PlantProvider with ChangeNotifier {
               "contents": [
                 {
                   "parts": [
-                    {"text": "Identify the type of the plant named ${plant.name}."}
+                    {
+                      "text":
+                          "Identify the type of the plant named ${plant.name}."
+                    }
                   ]
                 }
               ]
@@ -50,7 +55,8 @@ class PlantProvider with ChangeNotifier {
 
           if (response.statusCode == 200) {
             final data = json.decode(response.body);
-            final plantType = data['candidates'][0]['content']['parts'][0]['text'];
+            final plantType =
+                data['candidates'][0]['content']['parts'][0]['text'];
             plant.type = plantType;
           } else {
             print('Failed to fetch plant type for ${plant.name}');

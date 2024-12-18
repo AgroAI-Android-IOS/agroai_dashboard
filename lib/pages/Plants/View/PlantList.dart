@@ -3,14 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flareline/pages/Plants/View/CreatePlantPage.dart';
 import 'package:flareline/services/plantService.dart';
 import 'package:flareline/pages/Plants/Model/plantModel.dart';
-import 'package:flareline/core/theme/global_colors.dart';
 import 'package:flareline_uikit/components/card/common_card.dart';
-import 'package:http/http.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:provider/provider.dart';
-import 'package:flareline/pages/Plants/Providers/plant_provider.dart';
 
 class PlantListPage extends StatefulWidget {
   @override
@@ -42,7 +38,8 @@ class _PlantListPageState extends State<PlantListPage> {
         filteredPlants = fetchedPlants;
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to load plants')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Failed to load plants')));
     } finally {
       setState(() {
         isLoading = false;
@@ -54,7 +51,7 @@ class _PlantListPageState extends State<PlantListPage> {
     String query = _searchController.text.toLowerCase();
     List<Plant> results = plants.where((plant) {
       return plant.name.toLowerCase().contains(query) ||
-             plant.description.toLowerCase().contains(query);
+          plant.description.toLowerCase().contains(query);
     }).toList();
 
     setState(() {
@@ -140,7 +137,9 @@ class _PlantListPageState extends State<PlantListPage> {
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : filteredPlants.isEmpty
-              ? Center(child: Text('No plants found. Try searching or adding some plants!'))
+              ? Center(
+                  child: Text(
+                      'No plants found. Try searching or adding some plants!'))
               : ListView.builder(
                   itemCount: filteredPlants.length,
                   itemBuilder: (context, index) {
@@ -186,7 +185,8 @@ class _PlantListPageState extends State<PlantListPage> {
                                   builder: (BuildContext context) {
                                     return AlertDialog(
                                       title: Text('Delete Plant'),
-                                      content: Text('Are you sure you want to delete this plant?'),
+                                      content: Text(
+                                          'Are you sure you want to delete this plant?'),
                                       actions: <Widget>[
                                         TextButton(
                                           onPressed: () {
@@ -196,7 +196,8 @@ class _PlantListPageState extends State<PlantListPage> {
                                         ),
                                         TextButton(
                                           onPressed: () async {
-                                            await PlantService().deletePlant(plant.id);
+                                            await PlantService()
+                                                .deletePlant(plant.id);
                                             loadPlants();
                                             Navigator.of(context).pop();
                                           },
@@ -214,7 +215,8 @@ class _PlantListPageState extends State<PlantListPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => PlantDetailPage(plant: plant),
+                              builder: (context) =>
+                                  PlantDetailPage(plant: plant),
                             ),
                           );
                         },
