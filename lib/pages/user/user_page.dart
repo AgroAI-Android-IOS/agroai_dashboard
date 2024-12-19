@@ -1,125 +1,131 @@
-import 'package:flareline_uikit/core/mvvm/base_widget.dart';
+import 'package:flareline/pages/layout.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/user.dart';
 import 'user_provider.dart';
 
-class UserPage extends BaseWidget<UserProvider> {
+class UserPage extends LayoutWidget {
+  UserPage({super.key});
+
   final TextStyle errorStyle = TextStyle(
     color: Colors.red,
     fontSize: 12.0,
   );
 
   @override
+  String breakTabTitle(BuildContext context) {
+    return 'User Management';
+  }
+
+  @override
+  Widget contentDesktopWidget(BuildContext context) {
+    return bodyWidget(context, viewModelBuilder(context), null);
+  }
+
+  @override
   Widget bodyWidget(
       BuildContext context, UserProvider viewModel, Widget? child) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Users', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.blueGrey,
-      ),
-      body: Stack(
-        children: [
-          viewModel.users.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.person, size: 80, color: Colors.blueGrey),
-                      SizedBox(height: 16),
-                      Text(
-                        "No Users Available",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        "Add new users to see them here.",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ],
+    return Stack(
+      children: [
+        viewModel.users.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.person, size: 80, color: Colors.blueGrey),
+                    SizedBox(height: 16),
+                    Text(
+                      "No Users Available",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      "Add new users to see them here.",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
+              )
+            : SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: MediaQuery.of(context).size.width,
                   ),
-                )
-              : SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minWidth: MediaQuery.of(context).size.width,
-                    ),
-                    child: DataTable(
-                      columnSpacing: 20,
-                      horizontalMargin: 16,
-                      headingRowColor: MaterialStateColor.resolveWith(
-                          (states) => Colors.grey[200]!),
-                      headingTextStyle: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.blueGrey),
-                      columns: [
-                        DataColumn(label: Text('Name')),
-                        DataColumn(label: Text('Email')),
-                        DataColumn(label: Text('Role')),
-                        DataColumn(label: Text('Actions')),
-                      ],
-                      rows: viewModel.users.map((user) {
-                        return DataRow(cells: [
-                          DataCell(
-                            Text(
-                              user.name,
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                            ),
+                  child: DataTable(
+                    columnSpacing: 20,
+                    horizontalMargin: 16,
+                    headingRowColor: MaterialStateColor.resolveWith(
+                        (states) => Colors.grey[200]!),
+                    headingTextStyle: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.blueGrey),
+                    columns: [
+                      DataColumn(label: Text('Name')),
+                      DataColumn(label: Text('Email')),
+                      DataColumn(label: Text('Role')),
+                      DataColumn(label: Text('Actions')),
+                    ],
+                    rows: viewModel.users.map((user) {
+                      return DataRow(cells: [
+                        DataCell(
+                          Text(
+                            user.name,
+                            style: TextStyle(fontWeight: FontWeight.w500),
                           ),
-                          DataCell(
-                            Text(
-                              user.email,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                        ),
+                        DataCell(
+                          Text(
+                            user.email,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          DataCell(
-                            Text(
-                              user.role!,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                        ),
+                        DataCell(
+                          Text(
+                            user.role!,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          DataCell(
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.edit, color: Colors.blue),
-                                  onPressed: () {
-                                    _showUpdateDialog(context, viewModel, user);
-                                  },
-                                  tooltip: 'Edit User',
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.delete, color: Colors.red),
-                                  onPressed: () {
-                                    _showDeleteConfirmationDialog(
-                                        context, viewModel, user);
-                                  },
-                                  tooltip: 'Delete User',
-                                ),
-                              ],
-                            ),
+                        ),
+                        DataCell(
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.edit, color: Colors.blue),
+                                onPressed: () {
+                                  _showUpdateDialog(context, viewModel, user);
+                                },
+                                tooltip: 'Edit User',
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.delete, color: Colors.red),
+                                onPressed: () {
+                                  _showDeleteConfirmationDialog(
+                                      context, viewModel, user);
+                                },
+                                tooltip: 'Delete User',
+                              ),
+                            ],
                           ),
-                        ]);
-                      }).toList(),
-                    ),
+                        ),
+                      ]);
+                    }).toList(),
                   ),
                 ),
-          Positioned(
-            bottom: 16,
-            right: 16,
-            child: FloatingActionButton(
-              onPressed: () {
-                _showAddUserDialog(context, viewModel);
-              },
-              child: Icon(Icons.add),
-              tooltip: 'Add User',
-            ),
+              ),
+        Positioned(
+          bottom: 16,
+          right: 16,
+          child: FloatingActionButton(
+            onPressed: () {
+              _showAddUserDialog(context, viewModel);
+            },
+            child: Icon(Icons.add),
+            tooltip: 'Add User',
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

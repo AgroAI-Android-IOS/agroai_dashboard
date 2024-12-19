@@ -1,74 +1,99 @@
-import 'package:flareline/pages/Plants/View/PlantDetailPage.dart';
-import 'package:flutter/material.dart';
-import 'package:flareline/pages/Plants/View/CreatePlantPage.dart';
-import 'package:flareline/services/plantService.dart';
-import 'package:flareline/pages/Plants/Model/plantModel.dart';
-import 'package:flareline_uikit/components/card/common_card.dart';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
-class PlantListPage extends StatefulWidget {
+import 'package:flareline/pages/Plants/Model/plantModel.dart';
+import 'package:flareline/pages/Plants/View/CreatePlantPage.dart';
+import 'package:flareline/pages/Plants/View/PlantDetailPage.dart';
+import 'package:flareline/pages/layout.dart';
+import 'package:flareline/services/plantService.dart';
+import 'package:flareline_uikit/components/card/common_card.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/material.dart';
+
+class PlantListPage extends LayoutWidget {
+  const PlantListPage({Key? key}) : super(key: key);
+
   @override
-  _PlantListPageState createState() => _PlantListPageState();
+  String breakTabTitle(BuildContext context) {
+    return 'Plant Management';
+  }
+
+  @override
+  Widget contentDesktopWidget(BuildContext context) {
+    return const _PlantListPageContent();
+  }
+
+  @override
+  Widget bodyWidget(BuildContext context, dynamic viewModel, Widget? child) {
+    return const _PlantListPageContent();
+  }
 }
 
-class _PlantListPageState extends State<PlantListPage> {
+class _PlantListPageContent extends StatefulWidget {
+  const _PlantListPageContent({Key? key}) : super(key: key);
+
+  @override
+  State<_PlantListPageContent> createState() => _PlantListPageContentState();
+}
+
+class _PlantListPageContentState extends State<_PlantListPageContent> {
+  final TextEditingController _searchController = TextEditingController();
   List<Plant> plants = [];
   List<Plant> filteredPlants = [];
   bool isLoading = false;
-  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    loadPlants();
-    _searchController.addListener(_onSearchChanged);
+    _loadPlants();
+    _searchController.addListener(_filterPlants);
   }
 
-  Future<void> loadPlants() async {
-    setState(() {
-      isLoading = true;
-    });
-
+  Future<void> _loadPlants() async {
+    setState(() => isLoading = true);
     try {
-      List<Plant> fetchedPlants = await PlantService().fetchPlants();
+      final fetchedPlants = await PlantService().fetchPlants();
       setState(() {
         plants = fetchedPlants;
         filteredPlants = fetchedPlants;
       });
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Failed to load plants')));
+      _showMessage('Failed to load plants');
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      setState(() => isLoading = false);
     }
   }
 
-  void _onSearchChanged() {
-    String query = _searchController.text.toLowerCase();
-    List<Plant> results = plants.where((plant) {
-      return plant.name.toLowerCase().contains(query) ||
-          plant.description.toLowerCase().contains(query);
-    }).toList();
-
+  void _filterPlants() {
+    final query = _searchController.text.toLowerCase();
     setState(() {
-      filteredPlants = results;
+      filteredPlants = plants.where((plant) {
+        return plant.name.toLowerCase().contains(query) ||
+            plant.description.toLowerCase().contains(query);
+      }).toList();
     });
   }
 
-  Future<void> updatePlant(Plant plant) async {
+  Future<void> _editPlant(Plant plant) async {
     final updatedPlant = await Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => CreatePlantPage(plant: plant),
-      ),
+      MaterialPageRoute(builder: (context) => CreatePlantPage(plant: plant)),
     );
-    if (updatedPlant != null) {
-      loadPlants();
+    if (updatedPlant != null) _loadPlants();
+  }
+
+  Future<void> _deletePlant(String id) async {
+    try {
+      await PlantService().deletePlant(id);
+      _loadPlants();
+    } catch (e) {
+      _showMessage('Failed to delete plant');
     }
+  }
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -85,7 +110,7 @@ class _PlantListPageState extends State<PlantListPage> {
                 MaterialPageRoute(builder: (context) => CreatePlantPage()),
               );
               if (result == true) {
-                loadPlants();
+                _loadPlants();
               }
             },
           ),
@@ -105,41 +130,29 @@ class _PlantListPageState extends State<PlantListPage> {
           ),
         ),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                'Plant App',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              title: Text('Plants'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => PlantListPage()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : filteredPlants.isEmpty
               ? Center(
-                  child: Text(
-                      'No plants found. Try searching or adding some plants!'))
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.local_florist,
+                          size: 80, color: Colors.blueGrey),
+                      SizedBox(height: 16),
+                      Text(
+                        "No Plants Available",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        "Add new plants to see them here.",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                )
               : ListView.builder(
                   itemCount: filteredPlants.length,
                   itemBuilder: (context, index) {
@@ -174,39 +187,13 @@ class _PlantListPageState extends State<PlantListPage> {
                             IconButton(
                               icon: Icon(Icons.edit, color: Colors.blue),
                               onPressed: () {
-                                updatePlant(plant);
+                                _editPlant(plant);
                               },
                             ),
                             IconButton(
                               icon: Icon(Icons.delete, color: Colors.red),
                               onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text('Delete Plant'),
-                                      content: Text(
-                                          'Are you sure you want to delete this plant?'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text('Cancel'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () async {
-                                            await PlantService()
-                                                .deletePlant(plant.id);
-                                            loadPlants();
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text('Delete'),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
+                                _confirmDelete(plant.id);
                               },
                             ),
                           ],
@@ -225,5 +212,34 @@ class _PlantListPageState extends State<PlantListPage> {
                   },
                 ),
     );
+  }
+
+  void _confirmDelete(String id) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Delete Plant'),
+        content: Text('Are you sure you want to delete this plant?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _deletePlant(id);
+            },
+            child: Text('Delete'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }
