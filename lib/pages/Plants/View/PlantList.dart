@@ -20,7 +20,7 @@ class PlantListPage extends LayoutWidget {
 
   @override
   Widget contentDesktopWidget(BuildContext context) {
-    return const _PlantListPageContent();
+    return bodyWidget(context, null, null);
   }
 
   @override
@@ -98,12 +98,102 @@ class _PlantListPageContentState extends State<_PlantListPageContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Plants'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              hintText: 'Search plants...',
+              border: OutlineInputBorder(),
+              prefixIcon: Icon(Icons.search),
+            ),
+          ),
+        ),
+        if (isLoading)
+          CircularProgressIndicator()
+        else if (filteredPlants.isEmpty)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.local_florist, size: 80, color: Colors.blueGrey),
+              SizedBox(height: 16),
+              Text(
+                "No Plants Available",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8),
+              Text(
+                "Add new plants to see them here.",
+                style: TextStyle(color: Colors.grey),
+              ),
+            ],
+          )
+        else
+          Expanded(
+            child: ListView.builder(
+              itemCount: filteredPlants.length,
+              itemBuilder: (context, index) {
+                final plant = filteredPlants[index];
+                return CommonCard(
+                  child: ListTile(
+                    contentPadding: EdgeInsets.all(10),
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: kIsWeb
+                          ? Image.memory(
+                              base64Decode(plant.image),
+                              width: 50,
+                              height: 50,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.file(
+                              File(plant.image),
+                              width: 50,
+                              height: 50,
+                              fit: BoxFit.cover,
+                            ),
+                    ),
+                    title: Text(
+                      plant.name,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(plant.description),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit, color: Colors.blue),
+                          onPressed: () {
+                            _editPlant(plant);
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete, color: Colors.red),
+                          onPressed: () {
+                            _confirmDelete(plant.id);
+                          },
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PlantDetailPage(plant: plant),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        Padding(
+          padding: EdgeInsets.all(16),
+          child: FloatingActionButton(
             onPressed: () async {
               final result = await Navigator.push(
                 context,
@@ -113,104 +203,11 @@ class _PlantListPageContentState extends State<_PlantListPageContent> {
                 _loadPlants();
               }
             },
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Search plants...',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.search),
-              ),
-            ),
+            child: Icon(Icons.add),
+            tooltip: 'Add Plant',
           ),
         ),
-      ),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : filteredPlants.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.local_florist,
-                          size: 80, color: Colors.blueGrey),
-                      SizedBox(height: 16),
-                      Text(
-                        "No Plants Available",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        "Add new plants to see them here.",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                )
-              : ListView.builder(
-                  itemCount: filteredPlants.length,
-                  itemBuilder: (context, index) {
-                    final plant = filteredPlants[index];
-                    return CommonCard(
-                      child: ListTile(
-                        contentPadding: EdgeInsets.all(10),
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: kIsWeb
-                              ? Image.memory(
-                                  base64Decode(plant.image),
-                                  width: 50,
-                                  height: 50,
-                                  fit: BoxFit.cover,
-                                )
-                              : Image.file(
-                                  File(plant.image),
-                                  width: 50,
-                                  height: 50,
-                                  fit: BoxFit.cover,
-                                ),
-                        ),
-                        title: Text(
-                          plant.name,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(plant.description),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.edit, color: Colors.blue),
-                              onPressed: () {
-                                _editPlant(plant);
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
-                                _confirmDelete(plant.id);
-                              },
-                            ),
-                          ],
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  PlantDetailPage(plant: plant),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
+      ],
     );
   }
 

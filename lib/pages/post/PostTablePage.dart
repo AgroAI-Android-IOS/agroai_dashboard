@@ -1,16 +1,36 @@
+import 'package:flareline/pages/layout.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/post.dart'; // Import your Post model
 import '../../services/post_service.dart';
 
-class PostTablePage extends StatefulWidget {
+class PostTablePage extends LayoutWidget {
   const PostTablePage({super.key});
 
   @override
-  _PostTablePageState createState() => _PostTablePageState();
+  String breakTabTitle(BuildContext context) {
+    return 'Post Management';
+  }
+
+  @override
+  Widget contentDesktopWidget(BuildContext context) {
+    return bodyWidget(context, null, null);
+  }
+
+  @override
+  Widget bodyWidget(BuildContext context, dynamic viewModel, Widget? child) {
+    return const _PostTablePageContent();
+  }
 }
 
-class _PostTablePageState extends State<PostTablePage> {
+class _PostTablePageContent extends StatefulWidget {
+  const _PostTablePageContent({Key? key}) : super(key: key);
+
+  @override
+  _PostTablePageContentState createState() => _PostTablePageContentState();
+}
+
+class _PostTablePageContentState extends State<_PostTablePageContent> {
   late Future<List<Post>> futurePosts;
   List<Post> posts = []; // Local list to manage the posts
 
@@ -118,31 +138,31 @@ class _PostTablePageState extends State<PostTablePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Posts', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.blueGrey,
-      ),
-      body: posts.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.post_add, size: 80, color: Colors.blueGrey),
-                  SizedBox(height: 16),
-                  Text(
-                    "No Posts Available",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    "Add new posts to see them here.",
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                ],
-              ),
-            )
-          : SingleChildScrollView(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (posts.isEmpty)
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.post_add, size: 80, color: Colors.blueGrey),
+                SizedBox(height: 16),
+                Text(
+                  "No Posts Available",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  "Add new posts to see them here.",
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ],
+            ),
+          )
+        else
+          Expanded(
+            child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: ConstrainedBox(
                 constraints: BoxConstraints(
@@ -200,6 +220,18 @@ class _PostTablePageState extends State<PostTablePage> {
                 ),
               ),
             ),
+          ),
+        Padding(
+          padding: EdgeInsets.all(16),
+          child: FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/post');
+            },
+            child: Icon(Icons.add),
+            tooltip: 'Add Post',
+          ),
+        ),
+      ],
     );
   }
 
